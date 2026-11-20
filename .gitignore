@@ -1,0 +1,33 @@
+# ---- Datos y resultados (van por rsync, no por git) ----
+inputs/
+outputs/
+figuras/
+logs/
+
+# ---- Python / Jupyter ----
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+venv/
+
+# ---- Ficheros pesados sueltos, por si acaban fuera de outputs/ ----
+*.nc
+*.parquet
+*.pkl
+*.csv
+*.zarr/
+*.h5
+
+# ---- Clúster (SLURM) ----
+slurm-*.out
+*.err
+
+# ---- Sistema / editores ----
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*~
