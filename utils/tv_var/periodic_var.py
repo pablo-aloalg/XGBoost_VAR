@@ -170,16 +170,15 @@ class PeriodicVAR:
         lags are dropped (max_lag >= lag), so models with different p fitted with the same max_lag
         use exactly the same rows. Only the first `lag` lags are returned as regressors."""
         max_lag = lag if max_lag is None else max_lag
-        LAG_MATRIX = df.copy()
         cols_origin = df.columns
+        blocks = [df]
         for i in range(max_lag):
             delay = df.shift(freq=(i + 1) * self.dt).reindex(df.index)
-            for col in cols_origin:
-                LAG_MATRIX[f'{col}_lag_{i+1}'] = delay[col].values
-        LAG_MATRIX = LAG_MATRIX.dropna()
+            blocks.append(delay.add_suffix(f'_lag_{i+1}'))
+        LAG_MATRIX = pd.concat(blocks, axis=1).dropna()       # una sola concatenación
         Y = LAG_MATRIX[cols_origin]
         keep = [f'{col}_lag_{i+1}' for i in range(lag) for col in cols_origin]
-        LAG_MATRIX = LAG_MATRIX[keep]
+        LAG_MATRIX = LAG_MATRIX[keep].copy()
         LAG_MATRIX.insert(0, "const", 1.0)
 
         return LAG_MATRIX, Y
